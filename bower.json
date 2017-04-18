@@ -18,7 +18,10 @@
     "polymerfire": "firebase/polymerfire#^0.11.0",
     "paper-button": "PolymerElements/paper-button#^1.0.15",
     "iron-image": "PolymerElements/iron-image#^1.2.5",
-    "google-map": "GoogleWebComponents/google-map#^1.2.0"
+    "google-map": "GoogleWebComponents/google-map#^1.2.0",
+    "paper-card": "PolymerElements/paper-card#^1.1.6",
+    "iron-list": "PolymerElements/iron-list#^1.4.5",
+    "iron-ajax": "PolymerElements/iron-ajax#^1.4.3"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

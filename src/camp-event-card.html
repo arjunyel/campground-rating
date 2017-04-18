@@ -9,9 +9,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="camp-view3">
+<dom-module id="camp-event-card">
   <template>
     <style include="shared-styles">
       :host {
@@ -20,18 +22,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 10px;
       }
     </style>
-
-    <div class="card">
-      <div class="circle">3</div>
-      <h1>View Three</h1>
-      <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
-    </div>
+    <paper-card heading="[[event.name]]" image="http://placehold.it/350x150/FFC107/000000" alt="Emmental">
+      <div class="card-content">
+        [[event.description]] <br>
+        [[event.host]]
+      </div>
+      <div class="card-actions">
+        <paper-button>Share</paper-button>
+        <paper-button>Explore!</paper-button>
+      </div>
+    </paper-card>
   </template>
 
   <script>
     Polymer({
-      is: 'camp-view3',
+      is: 'camp-event-card',
+      properties: {
+        event: {
+          type: Object,
+          value: function() { return {"name": "Arjun's Birthday!", "description": "Hello world!", "host": "Abhi"};}
+        }
+      }
     });
   </script>
 </dom-module>

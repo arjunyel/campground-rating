@@ -10,6 +10,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/google-map/google-map.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="camp-event-card.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="camp-welcome">
@@ -31,6 +34,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       h1 {
         text-align: center;
+      }
+
+      .container{
+        display: flex;
+        flex-direction: column;
+      }
+      iron-list {
+        flex: 1 1 auto; /* don't use % values unless the parent element is sized. */
+      }
+
+      camp-event-card {
+        margin: 10px;
+        width: 350px;
+        height: 290px;
       }
     </style>
 
@@ -58,6 +75,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <img src="http://marioncampground.weebly.com/uploads/2/6/0/3/26030141/9493383_orig.jpg">
         </google-map-marker>
       </google-map>
+      <br>
+      <div class="container">
+      <iron-ajax
+         auto
+         url="events.json"
+         handle-as="json"
+         last-response="{{liveData}}"></iron-ajax>
+      <iron-list items="[[liveData]]" scroll-target="document" as="event" grid>
+        <template>
+          <div>
+            <camp-event-card event="[[event]]"></camp-event-card>
+          </div>
+        </template>
+      </iron-list>
+      </div>
     </div>
   </template>
 
