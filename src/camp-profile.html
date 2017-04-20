@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/salte-rating/salte-rating.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="camp-profile">
@@ -29,6 +30,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
       <iron-image src="[[user.photoURL]]" preload fade></iron-image>
       <p>[[user.displayName]]</p>
+      <salte-rating></salte-rating>
     </div>
   </template>
 
