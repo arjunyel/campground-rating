@@ -1,0 +1,74 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="camp-event-card.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="camp-place">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+
+      img {
+        width: 50px;
+        height: 50px;
+      }
+      h1 {
+        text-align: center;
+      }
+
+      .container{
+        display: flex;
+        flex-direction: column;
+      }
+      iron-list {
+        flex: 1 1 auto; /* don't use % values unless the parent element is sized. */
+      }
+
+      camp-event-card {
+        margin: 10px;
+        width: 350px;
+        height: 290px;
+      }
+    </style>
+
+    <div class="card">
+      Here goes info about a campground such as location and events located there
+      <br>
+      <div class="container">
+      <iron-ajax
+         auto
+         url="events.json"
+         handle-as="json"
+         last-response="{{liveData}}"></iron-ajax>
+      <iron-list items="[[liveData]]" scroll-target="document" as="event" grid>
+        <template>
+          <div>
+            <camp-event-card event="[[event]]"></camp-event-card>
+          </div>
+        </template>
+      </iron-list>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'camp-place',
+    });
+  </script>
+</dom-module>

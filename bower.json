@@ -21,7 +21,8 @@
     "google-map": "GoogleWebComponents/google-map#^1.2.0",
     "paper-card": "PolymerElements/paper-card#^1.1.6",
     "iron-list": "PolymerElements/iron-list#^1.4.5",
-    "iron-ajax": "PolymerElements/iron-ajax#^1.4.3"
+    "iron-ajax": "PolymerElements/iron-ajax#^1.4.3",
+    "salte-rating": "salte-io/salte-rating#^1.0.8"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
