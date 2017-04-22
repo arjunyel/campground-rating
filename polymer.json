@@ -4,7 +4,10 @@
   "fragments": [
     "src/camp-welcome.html",
     "src/camp-profile.html",
-    "src/camp-view3.html",
+    "src/camp-event.html",
+    "src/camp-map.html",
+    "src/camp-place.html",
+    "src/camp-welcome.html",
     "src/camp-view404.html"
   ],
   "sourceGlobs": [
