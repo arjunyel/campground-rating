@@ -1,0 +1,112 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/file-fire/file-fire.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="camp-create-event">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+
+      paper-dropdown-menu, paper-listbox {
+        width: 250px;
+      }
+    </style>
+
+    <firebase-auth app-name="camp" user="{{user}}"></firebase-auth>
+
+    <div class="card">
+      <form is="iron-form" id="form" method="get" action="/">
+        <div>
+          <paper-input name="description" required label="Description"></paper-input>
+        </div>
+
+        <div>
+          <paper-textarea label="Details" name="details" required></paper-textarea>
+        </div>
+
+        <div>
+          <paper-dropdown-menu id="location" required label="Location">
+            <paper-listbox id="list" class="dropdown-content">
+              <paper-item>Crab Orchard Campground</paper-item>
+              <paper-item>Giant City State Park</paper-item>
+              <paper-item>Little Grand Canyon</paper-item>
+              <paper-item>Lake Murphysboro State Park</paper-item>
+              <paper-item>Marion Campground</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+        </div>  
+
+        <div> 
+          <vaadin-date-picker required label="Date"></vaadin-date-picker>
+        </div>
+        
+        <div>
+          <file-fire 
+          app-name="camp"
+          id="upload"
+          progress="{{progress}}"
+          download-url="{{downloadUrl}}"
+          path="/[[user.uuid]]/picture"></file-fire>
+        </div>
+        
+        <paper-button raised on-tap="_submit">SUBMIT</paper-button>
+        
+      </form>
+      <br>
+      <div id="output"></div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'camp-create-event',
+      listeners: {
+        'form.iron-form-submit': 'firebase',
+        'list.iron-select': 'location' 
+      },
+      _submit: function() {
+        this.$.form.submit();
+      },
+      location: function(e){
+        console.log("selected!")
+      },
+      firebase: function(e) {
+        this.$.output.innerHTML = JSON.stringify(e.detail);
+        // this.$.query.ref.push({
+        //     name: e.detail.name,
+        //     email: e.detail.email,
+        //     phoneNumber: e.detail.phoneNumber,
+        //     address: e.detail.address,
+        //     zip: e.detail.zip,
+        //     country: e.detail.country
+        // });
+      }
+
+    });
+  </script>
+</dom-module>
