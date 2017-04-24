@@ -25,7 +25,6 @@
     "iron-form": "PolymerElements/iron-form#^1.1.4",
     "paper-input": "PolymerElements/paper-input#^1.1.24",
     "vaadin-date-picker": "vaadin/vaadin-date-picker#^1.2.3",
-    "vaadin-upload": "^1.1.4",
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.5.0",
     "paper-item": "PolymerElements/paper-item#^1.2.2",
     "paper-listbox": "PolymerElements/paper-listbox#^1.1.3",
