@@ -63,13 +63,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <firebase-app
-        name="camp"
-        auth-domain="camp-rating.firebaseapp.com"
-        database-url="https://camp-rating.firebaseio.com"
-        api-key="AIzaSyAkc7o3frmtbjKF4dmwXiJvPJF6gNVxMSU"
-        storage-bucket="camp-rating.appspot.com">
+      auth-domain="camp-rating.firebaseapp.com"
+      database-url="https://camp-rating.firebaseio.com"
+      api-key="AIzaSyAkc7o3frmtbjKF4dmwXiJvPJF6gNVxMSU"
+      storage-bucket="camp-rating.appspot.com">
     </firebase-app>
-    <firebase-auth id="auth" app-name="camp" user="{{user}}" provider="google" online={{online}}></firebase-auth>
+    <firebase-auth id="auth" user="{{user}}" provider="google" online={{online}}></firebase-auth>
 
     <app-location route="{{route}}"></app-location>
     <app-route
