@@ -25,6 +25,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/file-fire/file-fire.html">
+<link rel="import" href="../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../bower_components/paper-time-input/paper-time-input.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="camp-create-event">
@@ -47,8 +49,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       api-key="AIzaSyAkc7o3frmtbjKF4dmwXiJvPJF6gNVxMSU"
       storage-bucket="camp-rating.appspot.com">
     </firebase-app>
-    <firebase-auth id="auth" app-name="camp" user="{{user}}"></firebase-auth>
-
+    <firebase-auth id="auth" user="{{user}}"></firebase-auth>
+    <firebase-query
+      id="query"
+      path="/events/[[location]]">
+    </firebase-query>
+    
     <div class="card">
 
       <form is="iron-form" id="form" method="get" action="/">
@@ -61,7 +67,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
 
         <div>
-          <paper-dropdown-menu id="location" required label="Location">
+          <paper-dropdown-menu name="location" id="location" value="{{location}}" required label="Location">
             <paper-listbox id="list" class="dropdown-content">
               <paper-item>Crab Orchard Campground</paper-item>
               <paper-item>Giant City State Park</paper-item>
@@ -70,42 +76,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-item>Marion Campground</paper-item>
             </paper-listbox>
           </paper-dropdown-menu>
-        </div>  
-
+        </div>
         <div> 
-          <vaadin-date-picker required label="Date"></vaadin-date-picker>
+          <vaadin-date-picker required name="date" label="Date" value="{{date}}"></vaadin-date-picker>
         </div>
         <div>
-          <input id="test" type="file">
-          
+          <paper-time-input required name="time" id="time" value="{{time}}" format="24"></paper-time-input>
         </div>
-        
+        <div>
+          <file-fire
+            id="local"
+            app-name="camp"
+            path="/event/[[user.uid]]/[[location]]/[[date]]/[[time]]"
+            progress="{{progress}}"
+            download-url="{{downloadUrl}}"
+            placeholder="{{placeholder}}"
+            only-images>
+          </file-fire>
+          <br>
+          <paper-progress value="[[progress]]"></paper-progress>
+        </div>
+        <br>
         <paper-button raised on-tap="_submit">SUBMIT</paper-button>
       </form>
-      <br>
-      
-      <paper-button raised on-tap="storage"></paper-button>
-      <br>
-      <file-fire
-          id="local"
-          app-name="camp"
-          path="/local/file"
-          progress="{{progress}}"
-          download-url="{{downloadUrl}}"
-          placeholder="{{placeholder}}"
-          debug
-        >
-        </file-fire>
-        <br><br> 
-        Progress: {{progress}}% <br>
-        </br></br>URl's: </br>
-        <template is="dom-repeat" items="{{downloadUrl}}">
-          [[item.url]]
-        </template>
-        <br> <br> 
-        
-      <br>
-      [[downloadURL]]
       <br>
       <div id="output"></div>
     </div>
@@ -114,29 +107,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     Polymer({
       is: 'camp-create-event',
+      properties: {
+        downloadUrl: {
+          type: Array,
+          notify: true
+        },
+        user: {
+          type: Object
+        }
+      },
       listeners: {
-        'form.iron-form-submit': 'firebase',
-        'local.upload': '(e) => console.log(e)'
+        'form.iron-form-submit': 'firebase'
       },
       _submit: function() {
         this.$.form.submit();
       },
-      storage: function() {
-        console.log(firebase.app())
-        console.log(firebase.storage(firebase.app(this.$.auth.appName)));
-        // let storageRef = firebase.storage().ref('test/try.png');
-        // console.log(storageRef);
-      },
       firebase: function(e) {
         this.$.output.innerHTML = JSON.stringify(e.detail);
-        // this.$.query.ref.push({
-        //     name: e.detail.name,
-        //     email: e.detail.email,
-        //     phoneNumber: e.detail.phoneNumber,
-        //     address: e.detail.address,
-        //     zip: e.detail.zip,
-        //     country: e.detail.country
-        // });
+        let picUrl = "";
+        if (this.$.local.downloadUrl[0].url) {
+          picUrl = this.$.local.downloadUrl[0].url
+        }
+        var newEvent = this.$.query.ref.push();
+        newEvent.set({
+          key: newEvent.key,
+          description: e.detail.description,
+          details: e.detail.details,
+          location: e.detail.location,
+          date: e.detail.date,
+          time: e.detail.time,
+          picture: picUrl,
+          hostName: this.$.auth.user.displayName,
+          hostEmail: this.$.auth.user.email,
+          hostPic: this.$.auth.user.photoURL
+        });
       }
 
     });
