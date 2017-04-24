@@ -16,6 +16,5 @@ module.exports = {
     '/manifest.json',
     '/bower_components/webcomponentsjs/webcomponents-lite.min.js',
   ],
-  navigateFallback: 'index.html',
-  navigateFallbackWhitelist: [ /^\/[^\_]+\/?/ ]
+  navigateFallback: 'index.html'
 };

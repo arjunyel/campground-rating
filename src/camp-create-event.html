@@ -1,0 +1,148 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/vaadin-upload/vaadin-upload.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/file-fire/file-fire.html">
+<link rel="import" href="../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../bower_components/paper-time-input/paper-time-input.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="camp-create-event">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+
+      paper-dropdown-menu, paper-listbox {
+        width: 250px;
+      }
+    </style>
+    <firebase-app
+      name="camp"
+      auth-domain="camp-rating.firebaseapp.com"
+      database-url="https://camp-rating.firebaseio.com"
+      api-key="AIzaSyAkc7o3frmtbjKF4dmwXiJvPJF6gNVxMSU"
+      storage-bucket="camp-rating.appspot.com">
+    </firebase-app>
+    <firebase-auth id="auth" user="{{user}}"></firebase-auth>
+    <firebase-query
+      id="query"
+      path="/events/[[location]]">
+    </firebase-query>
+    
+    <div class="card">
+
+      <form is="iron-form" id="form" method="get" action="/">
+        <div>
+          <paper-input name="description" required label="Description"></paper-input>
+        </div>
+
+        <div>
+          <paper-textarea label="Details" name="details" required></paper-textarea>
+        </div>
+
+        <div>
+          <paper-dropdown-menu name="location" id="location" value="{{location}}" required label="Location">
+            <paper-listbox id="list" class="dropdown-content">
+              <paper-item>Crab Orchard Campground</paper-item>
+              <paper-item>Giant City State Park</paper-item>
+              <paper-item>Little Grand Canyon</paper-item>
+              <paper-item>Lake Murphysboro State Park</paper-item>
+              <paper-item>Marion Campground</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+        </div>
+        <div> 
+          <vaadin-date-picker required name="date" label="Date" value="{{date}}"></vaadin-date-picker>
+        </div>
+        <div>
+          <paper-time-input required name="time" id="time" value="{{time}}" format="24"></paper-time-input>
+        </div>
+        <div>
+          <file-fire
+            id="local"
+            app-name="camp"
+            path="/event/[[user.uid]]/[[location]]/[[date]]/[[time]]"
+            progress="{{progress}}"
+            download-url="{{downloadUrl}}"
+            placeholder="{{placeholder}}"
+            only-images>
+          </file-fire>
+          <br>
+          <paper-progress value="[[progress]]"></paper-progress>
+        </div>
+        <br>
+        <paper-button raised on-tap="_submit">SUBMIT</paper-button>
+      </form>
+      <br>
+      <div id="output"></div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'camp-create-event',
+      properties: {
+        downloadUrl: {
+          type: Array,
+          notify: true
+        },
+        user: {
+          type: Object
+        }
+      },
+      listeners: {
+        'form.iron-form-submit': 'firebase'
+      },
+      _submit: function() {
+        this.$.form.submit();
+      },
+      firebase: function(e) {
+        this.$.output.innerHTML = JSON.stringify(e.detail);
+        let picUrl = "";
+        if (this.$.local.downloadUrl[0].url) {
+          picUrl = this.$.local.downloadUrl[0].url
+        }
+        var newEvent = this.$.query.ref.push();
+        newEvent.set({
+          key: newEvent.key,
+          description: e.detail.description,
+          details: e.detail.details,
+          location: e.detail.location,
+          date: e.detail.date,
+          time: e.detail.time,
+          picture: picUrl,
+          hostName: this.$.auth.user.displayName,
+          hostEmail: this.$.auth.user.email,
+          hostPic: this.$.auth.user.photoURL
+        });
+      }
+
+    });
+  </script>
+</dom-module>
