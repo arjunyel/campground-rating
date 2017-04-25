@@ -52,6 +52,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       id="query"
       path="/events/[[location]]">
     </firebase-query>
+    <firebase-query
+      id="userInfo"
+      path="/profile/[[user.uid]]/info">
+    </firebase-query>
+    <firebase-query
+      id="userEvents"
+      path="/profile/[[user.uid]]/events">
+    </firebase-query>
     
     <div class="card">
 
@@ -164,8 +172,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           picture: picUrl,
           hostName: this.$.auth.user.displayName,
           hostEmail: this.$.auth.user.email,
+          hostUid: this.$.auth.user.uid,
           hostPic: this.$.auth.user.photoURL,
           created: time
+        });
+        var newUserInfo  = this.$.userInfo.ref.push();
+        newUserInfo.set({
+          key: UserInfo.key,
+          name: this.$.auth.user.displayName,
+          email: this.$.auth.user.email,
+          uid: this.$.auth.user.uid,
+          pic: this.$.auth.user.photoURL
         });
       }
 
