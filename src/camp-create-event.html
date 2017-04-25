@@ -67,7 +67,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
 
         <div>
-          <paper-dropdown-menu name="location" id="location" value="{{location}}" required label="Location">
+          <paper-dropdown-menu name="location" id="location" required label="Location">
             <paper-listbox id="list" class="dropdown-content">
               <paper-item>Crab Orchard Campground</paper-item>
               <paper-item>Giant City State Park</paper-item>
@@ -91,8 +91,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             progress="{{progress}}"
             download-url="{{downloadUrl}}"
             placeholder="{{placeholder}}"
-            only-images>
-          </file-fire>
+            only-images></file-fire>
           <br>
           <paper-progress value="[[progress]]"></paper-progress>
         </div>
@@ -114,6 +113,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         user: {
           type: Object
+        },
+        location: {
+          type: String,
+          notify: true
         }
       },
       listeners: {
@@ -128,12 +131,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (this.$.local.downloadUrl[0].url) {
           picUrl = this.$.local.downloadUrl[0].url
         }
+        switch (e.detail.location) {
+          case "Crab Orchard Campground":
+            this.location = "crab";
+            break;
+          case "Giant City State Park":
+            this.location = "giant";
+            break;
+          case "Little Grand Canyon":
+            this.location = "little";
+            break;
+          case "Lake Murphysboro State Park":
+            this.location = "lake";
+            break;
+          case "Marion Campground":
+            this.location = "marion";
+            break;
+          default:
+            break;
+        }
         var newEvent = this.$.query.ref.push();
         newEvent.set({
           key: newEvent.key,
           description: e.detail.description,
           details: e.detail.details,
-          location: e.detail.location,
+          location: this.location,
           date: e.detail.date,
           time: e.detail.time,
           picture: picUrl,
