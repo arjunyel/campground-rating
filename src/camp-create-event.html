@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
@@ -52,13 +53,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       id="query"
       path="/events/[[location]]">
     </firebase-query>
-    <firebase-query
+    <firebase-document
       id="userInfo"
-      path="/profile/[[user.uid]]/info">
-    </firebase-query>
+      path="/users/info/[[user.uid]]"
+      data="{{profileInfo}}"></firebase-document>
     <firebase-query
       id="userEvents"
-      path="/profile/[[user.uid]]/events">
+      path="/users/events/[[user.uid]]">
     </firebase-query>
     
     <div class="card">
@@ -87,7 +88,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <vaadin-date-picker required name="date" label="Date" value="{{date}}"></vaadin-date-picker>
         </div>
         <div>
-          <paper-time-input required name="time" id="time" value="{{time}}" format="24"></paper-time-input>
+          <paper-time-input required name="time" id="time" value="{{time24}}" format="24"></paper-time-input>
         </div>
         <div>
           <file-fire
@@ -124,6 +125,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Object
         },
         location: {
+          type: String,
+          notify: true
+        },
+        time24: {
           type: String,
           notify: true
         }
@@ -168,7 +173,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           location: this.location,
           locationFull: e.detail.location,
           date: e.detail.date,
-          time: e.detail.time,
+          time: this.time24,
           picture: picUrl,
           hostName: this.$.auth.user.displayName,
           hostEmail: this.$.auth.user.email,
@@ -176,13 +181,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           hostPic: this.$.auth.user.photoURL,
           created: time
         });
-        var newUserInfo  = this.$.userInfo.ref.push();
-        newUserInfo.set({
-          key: UserInfo.key,
-          name: this.$.auth.user.displayName,
-          email: this.$.auth.user.email,
-          uid: this.$.auth.user.uid,
-          pic: this.$.auth.user.photoURL
+        this.$.userInfo.data = {uid: this.$.auth.user.uid, name: this.$.auth.user.displayName, email: this.$.auth.user.email, pic: this.$.auth.user.photoURL};
+        var newUserEvent = this.$.userEvents.ref.push();
+        newUserEvent.set({
+          key: newEvent.key,
+          description: e.detail.description,
+          details: e.detail.details,
+          location: this.location,
+          locationFull: e.detail.location,
+          date: e.detail.date,
+          time: this.time24,
+          picture: picUrl,
+          hostName: this.$.auth.user.displayName,
+          hostEmail: this.$.auth.user.email,
+          hostUid: this.$.auth.user.uid,
+          hostPic: this.$.auth.user.photoURL,
+          created: time
         });
       }
 
