@@ -12,6 +12,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/salte-rating/salte-rating.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-avatar/paper-avatar.html">
+<link rel="import" href="../bower_components/time-display/time-diff.html">
+<link rel="import" href="camp-event-card.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="camp-profile">
@@ -22,26 +30,94 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
+      iron-list {
+        flex: 1 1 auto; /* don't use % values unless the parent element is sized. */
+      }
+      camp-event-card {
+        margin: 10px;
+        width: 250px;
+        height: 290px;
+      }
     </style>
-    <firebase-auth user="{{user}}"></firebase-auth>
+
+    <firebase-auth id="auth" user="{{user}}"></firebase-auth>
+    <firebase-document
+      id="userInfo"
+      path="/users/info/[[route]]"
+      data="{{profile}}"></firebase-document>
+    <firebase-document
+      id="avgRate"
+      path="/users/avgRate/[[route]]"
+      data="{{averageRate}}"></firebase-document>
+    <firebase-query
+      id="userEvents"
+      path="/users/events/[[route]]"
+      data="{{events}}"></firebase-query>
+    <firebase-query
+      id="ratings"
+      path="/users/ratings/[[route]]"
+      data="{{ratings}}"></firebase-query>
+
     <div class="card">
       <div>
-        [[user.email]]
+        [[profile.name]]
       </div>
       <div>
-        [[user.displayName]]
+        [[profile.email]]
       </div>
-      <div>
-        [[user.uid]]
+      <iron-image src="[[profile.pic]]" preload fade></iron-image> <br>
+      Average Rating: <salte-rating disabled value="[[averageRate.avg]]"></salte-rating> <br>
+      <div id="submitRating">Rate: <salte-rating id="newRating"></salte-rating></div> <br>
+      <template is="dom-repeat" items="{{ratings}}" as="rate">
+          <paper-avatar label="[[rate.rater]]" two-chars></paper-avatar> Rated <time-diff datetime="[[rate.created]]"></time-diff>:  <salte-rating disabled value="[[rate.rating]]"></salte-rating> <br><br>
+      </template>
+      <br>
+      User events: <br>
+      <div class="container">
+      <iron-list items="[[events]]" scroll-target="document" as="event" grid>
+        <template>
+          <div>
+            <camp-event-card event="[[event]]"></camp-event-card>
+          </div>
+        </template>
+      </iron-list>
       </div>
-      <iron-image src="[[user.photoURL]]" preload fade></iron-image>
-      <salte-rating></salte-rating>
     </div>
   </template>
 
   <script>
     Polymer({
       is: 'camp-profile',
+      listeners: {
+        'newRating.rate': 'newRate'
+      },
+      properties: {
+        route: {
+          type: String
+        }
+      },
+      newRate: function(e) {
+        console.log()
+        const time = new Date().toISOString();
+        let newRating = this.$.ratings.ref.push();
+        newRating.set({
+          rating: e.detail.rating,
+          rater: this.$.auth.user.displayName,
+          created: time
+        });
+        let average = this.$.avgRate.ref;
+        average.transaction(function(rating) {
+          if (rating === null) {
+            return  { num: 1, avg: e.detail.rating};
+          } else {
+            const sizeNew = rating.num + 1;
+            const avgOld = rating.avg;
+            const valueNew = e.detail.rating;
+            const avgNew = avgOld + ((valueNew-avgOld)/sizeNew);
+            return {num: sizeNew, avg: avgNew};
+          }
+        });
+      }
     });
   </script>
 </dom-module>

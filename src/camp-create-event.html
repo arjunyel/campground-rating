@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
@@ -21,8 +22,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/vaadin-upload/vaadin-upload.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/file-fire/file-fire.html">
 <link rel="import" href="../bower_components/paper-progress/paper-progress.html">
@@ -54,6 +53,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       id="query"
       path="/events/[[location]]">
     </firebase-query>
+    <firebase-document
+      id="userInfo"
+      path="/users/info/[[user.uid]]"
+      data="{{profileInfo}}"></firebase-document>
+    <firebase-query
+      id="userEvents"
+      path="/users/events/[[user.uid]]">
+    </firebase-query>
     
     <div class="card">
 
@@ -67,7 +74,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
 
         <div>
-          <paper-dropdown-menu name="location" id="location" value="{{location}}" required label="Location">
+          <paper-dropdown-menu name="location" id="location" required label="Location">
             <paper-listbox id="list" class="dropdown-content">
               <paper-item>Crab Orchard Campground</paper-item>
               <paper-item>Giant City State Park</paper-item>
@@ -81,7 +88,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <vaadin-date-picker required name="date" label="Date" value="{{date}}"></vaadin-date-picker>
         </div>
         <div>
-          <paper-time-input required name="time" id="time" value="{{time}}" format="24"></paper-time-input>
+          <paper-time-input required name="time" id="time" value="{{time24}}" format="24"></paper-time-input>
         </div>
         <div>
           <file-fire
@@ -91,8 +98,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             progress="{{progress}}"
             download-url="{{downloadUrl}}"
             placeholder="{{placeholder}}"
-            only-images>
-          </file-fire>
+            resize-height="150"
+            resize-width="250"
+            only-images
+            over-write></file-fire>
           <br>
           <paper-progress value="[[progress]]"></paper-progress>
         </div>
@@ -114,6 +123,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         user: {
           type: Object
+        },
+        location: {
+          type: String,
+          notify: true
+        },
+        time24: {
+          type: String,
+          notify: true
         }
       },
       listeners: {
@@ -128,18 +145,58 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (this.$.local.downloadUrl[0].url) {
           picUrl = this.$.local.downloadUrl[0].url
         }
+        switch (e.detail.location) {
+          case "Crab Orchard Campground":
+            this.location = "crab";
+            break;
+          case "Giant City State Park":
+            this.location = "giant";
+            break;
+          case "Little Grand Canyon":
+            this.location = "little";
+            break;
+          case "Lake Murphysboro State Park":
+            this.location = "lake";
+            break;
+          case "Marion Campground":
+            this.location = "marion";
+            break;
+          default:
+            break;
+        }
+        const time = new Date().toISOString();
         var newEvent = this.$.query.ref.push();
         newEvent.set({
           key: newEvent.key,
           description: e.detail.description,
           details: e.detail.details,
-          location: e.detail.location,
+          location: this.location,
+          locationFull: e.detail.location,
           date: e.detail.date,
-          time: e.detail.time,
+          time: this.time24,
           picture: picUrl,
           hostName: this.$.auth.user.displayName,
           hostEmail: this.$.auth.user.email,
-          hostPic: this.$.auth.user.photoURL
+          hostUid: this.$.auth.user.uid,
+          hostPic: this.$.auth.user.photoURL,
+          created: time
+        });
+        this.$.userInfo.data = {uid: this.$.auth.user.uid, name: this.$.auth.user.displayName, email: this.$.auth.user.email, pic: this.$.auth.user.photoURL};
+        var newUserEvent = this.$.userEvents.ref.push();
+        newUserEvent.set({
+          key: newEvent.key,
+          description: e.detail.description,
+          details: e.detail.details,
+          location: this.location,
+          locationFull: e.detail.location,
+          date: e.detail.date,
+          time: this.time24,
+          picture: picUrl,
+          hostName: this.$.auth.user.displayName,
+          hostEmail: this.$.auth.user.email,
+          hostUid: this.$.auth.user.uid,
+          hostPic: this.$.auth.user.photoURL,
+          created: time
         });
       }
 
