@@ -9,12 +9,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/salte-rating/salte-rating.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-avatar/paper-avatar.html">
+<link rel="import" href="../bower_components/time-display/time-diff.html">
+<link rel="import" href="camp-event-card.html">
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="camp-profile">
+<dom-module id="camp-my-profile">
   <template>
     <style include="shared-styles">
       :host {
@@ -22,27 +29,63 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
+      iron-list {
+        flex: 1 1 auto; /* don't use % values unless the parent element is sized. */
+      }
+      camp-event-card {
+        margin: 10px;
+        width: 250px;
+        height: 290px;
+      }
     </style>
 
     <firebase-auth id="auth" user="{{user}}"></firebase-auth>
+    <firebase-document
+      id="userInfo"
+      path="/users/info/[[user.uid]]"
+      data="{{profile}}"></firebase-document>
+    <firebase-document
+      id="avgRate"
+      path="/users/avgRate/[[user.uid]]"
+      data="{{averageRate}}"></firebase-document>
+    <firebase-query
+      id="userEvents"
+      path="/users/events/[[user.uid]]"
+      data="{{events}}"></firebase-query>
+    <firebase-query
+      id="ratings"
+      path="/users/ratings/[[user.uid]]"
+      data="{{ratings}}"></firebase-query>
+
     <div class="card">
-      <div>
-        [[user.email]]
-      </div>
       <div>
         [[user.displayName]]
       </div>
       <div>
-        [[user.uid]]
+        [[user.email]]
       </div>
-      <iron-image src="[[user.photoURL]]" preload fade></iron-image>
-      <salte-rating></salte-rating>
+      <iron-image src="[[user.photoURL]]" preload fade></iron-image> <br>
+      Average Rating: <salte-rating disabled value="[[averageRate.avg]]"></salte-rating> <br>
+      <template is="dom-repeat" items="{{ratings}}" as="rate">
+          <paper-avatar label="[[rate.rater]]" two-chars></paper-avatar> Rated <time-diff datetime="[[rate.created]]"></time-diff>:  <salte-rating disabled value="[[rate.rating]]"></salte-rating> <br><br>
+      </template>
+      <br>
+      User events: <br>
+      <div class="container">
+      <iron-list items="[[events]]" scroll-target="document" as="event" grid>
+        <template>
+          <div>
+            <camp-event-card event="[[event]]"></camp-event-card>
+          </div>
+        </template>
+      </iron-list>
+      </div>
     </div>
   </template>
 
   <script>
     Polymer({
-      is: 'camp-profile',
+      is: 'camp-my-profile',
     });
   </script>
 </dom-module>
