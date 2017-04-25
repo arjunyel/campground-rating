@@ -150,6 +150,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           default:
             break;
         }
+        const time = new Date().toISOString();
         var newEvent = this.$.query.ref.push();
         newEvent.set({
           key: newEvent.key,
@@ -161,7 +162,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           picture: picUrl,
           hostName: this.$.auth.user.displayName,
           hostEmail: this.$.auth.user.email,
-          hostPic: this.$.auth.user.photoURL
+          hostPic: this.$.auth.user.photoURL,
+          created: time
         });
       }
 

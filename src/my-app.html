@@ -75,6 +75,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         pattern="/:page"
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
+    <app-route
+        route="{{subroute}}"
+        pattern="/:info"
+        data="{{url}}"></app-route>
 
     <app-drawer-layout fullbleed>
       <!-- Drawer content -->
@@ -110,8 +114,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <camp-welcome name="welcome"></camp-welcome>
           <camp-profile name="profile"></camp-profile>
           <camp-map name="map"></camp-map>
-          <camp-place name="place"></camp-place>
-          <camp-event name="event"></camp-event>
+          <camp-place name="place" route="[[url.info]]"></camp-place>
+          <camp-event name="event" route="[[url.info]]"></camp-event>
           <camp-create-event name="create-event"></camp-create-event>
           <camp-view404 name="view404"></camp-view404>
         </iron-pages>

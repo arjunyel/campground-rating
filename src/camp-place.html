@@ -10,7 +10,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/paper-weather/paper-weather.html">
+<link rel="import" href="../bower_components/google-map/google-map.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="camp-event-card.html">
 <link rel="import" href="shared-styles.html">
 
@@ -30,24 +35,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       h1 {
         text-align: center;
       }
-
-      .container{
-        display: flex;
-        flex-direction: column;
-      }
       iron-list {
         flex: 1 1 auto; /* don't use % values unless the parent element is sized. */
       }
 
       camp-event-card {
         margin: 10px;
-        width: 350px;
+        width: 250px;
         height: 290px;
       }
+      address {
+        text-align: center;
+      }
+
+      google-map {
+        height: 150px;
+      }
     </style>
+    
+    
+    <iron-ajax
+       auto
+       url="[[importPath]]/[[route]].json"
+       handle-as="json"
+       last-response="{{place}}"></iron-ajax>
+    
 
     <div class="card">
-      Here goes info about a campground such as location and events located there
+      <h1>[[place.name]]</h1>
+      
+      <address>[[place.address]]</address>
+      <br>
+      <paper-weather location="[[place.zip]]"></paper-weather>
+      <br>
+      <google-map fit-to-markers disable-default-ui api-key="AIzaSyDp7hNij6d2Rh6YOSV7BoWF0Hyrw3swDU4" map-type="satellite">
+        <google-map-marker latitude="[[place.latitude]]" longitude="[[place.longitude]]"></google-map-marker>
+      </google-map> 
       <br>
       <div class="container">
       <iron-ajax
@@ -69,6 +92,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     Polymer({
       is: 'camp-place',
+      properties: {
+        route: {
+          type: String
+        }
+      }
     });
   </script>
 </dom-module>

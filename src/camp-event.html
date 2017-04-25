@@ -22,13 +22,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div class="card">
-      This is the page where details about an event go such as comments or the host
+      This is the page where details about [[route]] go such as comments or the host
     </div>
   </template>
 
   <script>
     Polymer({
       is: 'camp-event',
+      properties: {
+        route: {
+          type: String
+        }
+      }
     });
   </script>
 </dom-module>
