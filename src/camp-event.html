@@ -9,6 +9,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-avatar/paper-avatar.html">
+<link rel="import" href="../bower_components/time-display/time-diff.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="camp-event">
@@ -21,8 +30,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
+    <firebase-auth id="auth" user="{{user}}"></firebase-auth>
+    <firebase-document
+      path="/events/[[route]]/[[key]]"
+      data="{{event}}"></firebase-document>
+    <firebase-query
+      id="query"
+      path="/comments/[[key]]"
+      data="{{comments}}"></firebase-query>
+
     <div class="card">
-      This is the page where details about [[route]] go such as comments or the host
+      Description: [[event.description]] <br>
+      Host: [[event.hostName]] <br>
+      Host Email: [[event.email]] <br>
+      <iron-image preload fade src="[[event.hostPic]]"></iron-image> <br>
+      [[event.details]] <br>
+      Date: [[event.date]] Time: [[event.time]] <br>
+      Created: <time-diff datetime="[[event.created]]"></time-diff> <br>
+      Location: [[event.locationFull]] <br>
+      <iron-image preload fade src="[[event.picture]]"></iron-image> <br> <br>
+      <div id="comments">
+        <form is="iron-form" id="form" method="get" action="/">
+          <div>
+            <paper-textarea label="Comment" name="msg" required></paper-textarea> <paper-button raised on-tap="_submit">SUBMIT</paper-button>
+          </div>
+        </form> <br>
+        <template is="dom-repeat" items="{{comments}}" as="comment">
+          <paper-avatar label="[[comment.poster]]" two-chars></paper-avatar> Sent <time-diff datetime="[[comment.created]]"></time-diff>:  [[comment.msg]]  <br><br>
+        </template>
+      </div>
+
     </div>
   </template>
 
@@ -32,7 +69,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       properties: {
         route: {
           type: String
+        },
+        key: {
+          type: String
         }
+      },
+      listeners: {
+        'form.iron-form-submit': 'firebase'
+      },
+      _submit: function() {
+        this.$.form.submit();
+      },
+      firebase: function(e) {
+        const time = new Date().toISOString();
+        var newComment = this.$.query.ref.push();
+        newComment.set({
+          key: newComment.key,
+          msg: e.detail.msg,
+          poster: this.$.auth.user.displayName,
+          created: time
+        });
       }
     });
   </script>

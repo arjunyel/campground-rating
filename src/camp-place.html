@@ -53,7 +53,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
     
-    
+    <firebase-auth id="auth" user="{{user}}"></firebase-auth>
+    <firebase-query
+      id="query"
+      path="/events/[[route]]"
+      data={{liveData}}>
+    </firebase-query>
     <iron-ajax
        auto
        url="[[importPath]]/[[route]].json"
@@ -68,16 +73,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <br>
       <paper-weather location="[[place.zip]]"></paper-weather>
       <br>
-      <google-map fit-to-markers disable-default-ui api-key="AIzaSyDp7hNij6d2Rh6YOSV7BoWF0Hyrw3swDU4" map-type="satellite">
+      <google-map id="map" hidden fit-to-markers disable-default-ui api-key="AIzaSyDp7hNij6d2Rh6YOSV7BoWF0Hyrw3swDU4" map-type="satellite">
         <google-map-marker latitude="[[place.latitude]]" longitude="[[place.longitude]]"></google-map-marker>
-      </google-map> 
+      </google-map>
       <br>
       <div class="container">
-      <iron-ajax
-         auto
-         url="events.json"
-         handle-as="json"
-         last-response="{{liveData}}"></iron-ajax>
       <iron-list items="[[liveData]]" scroll-target="document" as="event" grid>
         <template>
           <div>

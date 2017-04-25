@@ -21,8 +21,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/vaadin-upload/vaadin-upload.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/file-fire/file-fire.html">
 <link rel="import" href="../bower_components/paper-progress/paper-progress.html">
@@ -91,7 +89,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             progress="{{progress}}"
             download-url="{{downloadUrl}}"
             placeholder="{{placeholder}}"
-            only-images></file-fire>
+            resize-height="150"
+            resize-width="250"
+            only-images
+            over-write></file-fire>
           <br>
           <paper-progress value="[[progress]]"></paper-progress>
         </div>
@@ -157,6 +158,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           description: e.detail.description,
           details: e.detail.details,
           location: this.location,
+          locationFull: e.detail.location,
           date: e.detail.date,
           time: e.detail.time,
           picture: picUrl,

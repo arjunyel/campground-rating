@@ -32,7 +32,9 @@
     "paper-progress": "PolymerElements/paper-progress#^1.0.12",
     "polymerfire": "firebase/polymerfire#^0.11.1",
     "paper-time-input": "ryanburns23/paper-time-input#^1.0.4",
-    "paper-weather": "ryanburns23/paper-weather#^1.1.0"
+    "paper-weather": "ryanburns23/paper-weather#^1.1.0",
+    "time-display": "CaptainCodeman/time-display#^0.0.2",
+    "paper-avatar": "Abe90/paper-avatar#^1.0.2"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

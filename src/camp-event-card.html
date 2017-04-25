@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/time-display/time-diff.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="camp-event-card">
@@ -22,14 +23,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 10px;
       }
     </style>
-    <paper-card heading="[[event.name]]" image="http://placehold.it/350x150/FFC107/000000" alt="Emmental">
+    <paper-card heading="[[event.description]]" image="[[event.picture]]" alt="">
       <div class="card-content">
-        [[event.description]] <br>
-        [[event.host]]
+        [[event.details]] <br>
+        Date: [[event.date]] Time: [[event.time]] <br>
+        Created: <time-diff datetime="[[event.created]]"></time-diff>
       </div>
       <div class="card-actions">
-        <paper-button>Share</paper-button>
-        <paper-button>Explore!</paper-button>
+        <a href="/event/[[event.location]]/[[event.key]]">Event Page</a>
       </div>
     </paper-card>
   </template>
@@ -39,8 +40,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'camp-event-card',
       properties: {
         event: {
-          type: Object,
-          value: function() { return {"name": "Arjun's Birthday!", "description": "Hello world!", "host": "Abhi"};}
+          type: Object
         }
       }
     });
