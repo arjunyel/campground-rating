@@ -207,7 +207,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           cost: e.detail.cost,
           created: time
         });
-        const photos = this.$.photos.ref.push({
+        this.$.photos.ref.push({
           picture: picUrl,
           location: this.location,
           locationFull: e.detail.location
