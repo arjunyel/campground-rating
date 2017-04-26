@@ -12,6 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/time-display/time-diff.html">
+<link rel="import" href="../bower_components/numbro-element/numbro-element.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="camp-event-card">
@@ -26,6 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <paper-card heading="[[event.description]]" image="[[event.picture]]" alt="">
       <div class="card-content">
         [[event.details]] <br>
+        <numbro-element value="[[event.cost]]" format="0.00" currency></numbro-element> <br>
         Date: [[event.date]] Time: [[event.time]] <br>
         Created: <time-diff datetime="[[event.created]]"></time-diff>
       </div>

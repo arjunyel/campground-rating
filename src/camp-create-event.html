@@ -21,11 +21,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="../bower_components/vaadin-upload/vaadin-upload.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/file-fire/file-fire.html">
 <link rel="import" href="../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../bower_components/paper-time-input/paper-time-input.html">
+<link rel="import" href="../bower_components/money-input/money-input.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="camp-create-event">
@@ -61,6 +61,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       id="userEvents"
       path="/users/events/[[user.uid]]">
     </firebase-query>
+    <firebase-query
+      id="photos"
+      path="/photos">
+    </firebase-query>
     
     <div class="card">
 
@@ -83,6 +87,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-item>Marion Campground</paper-item>
             </paper-listbox>
           </paper-dropdown-menu>
+        </div>
+        <div>
+          <money-input required name="cost" label="Cost of event"></money-input>
         </div>
         <div> 
           <vaadin-date-picker required name="date" label="Date" value="{{date}}"></vaadin-date-picker>
@@ -140,7 +147,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.form.submit();
       },
       firebase: function(e) {
-        this.$.output.innerHTML = JSON.stringify(e.detail);
+        // this.$.output.innerHTML = JSON.stringify(e.detail);
         let picUrl = "";
         if (this.$.local.downloadUrl[0].url) {
           picUrl = this.$.local.downloadUrl[0].url
@@ -165,7 +172,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             break;
         }
         const time = new Date().toISOString();
-        var newEvent = this.$.query.ref.push();
+        const newEvent = this.$.query.ref.push();
         newEvent.set({
           key: newEvent.key,
           description: e.detail.description,
@@ -179,10 +186,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           hostEmail: this.$.auth.user.email,
           hostUid: this.$.auth.user.uid,
           hostPic: this.$.auth.user.photoURL,
+          cost: e.detail.cost,
           created: time
         });
         this.$.userInfo.data = {uid: this.$.auth.user.uid, name: this.$.auth.user.displayName, email: this.$.auth.user.email, pic: this.$.auth.user.photoURL};
-        var newUserEvent = this.$.userEvents.ref.push();
+        const newUserEvent = this.$.userEvents.ref.push();
         newUserEvent.set({
           key: newEvent.key,
           description: e.detail.description,
@@ -196,8 +204,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           hostEmail: this.$.auth.user.email,
           hostUid: this.$.auth.user.uid,
           hostPic: this.$.auth.user.photoURL,
+          cost: e.detail.cost,
           created: time
         });
+        const photos = this.$.photos.ref.push({
+          picture: picUrl,
+          location: this.location,
+          locationFull: e.detail.location
+        });
+        window.location.href = '/event/' + this.location +'/'+ newEvent.key;
       }
 
     });
