@@ -9,6 +9,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="camp-welcome">
@@ -21,8 +23,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
+    <firebase-query
+      id="photos"
+      path="/photos"
+      data="{{pictures}}"></firebase-query>
+    
     <div class="card">
       Welcome to the Campground rating app!
+
+    <div>
+    <template is="dom-repeat" items="{{pictures}}" as="pic">
+      <iron-image preload fade src="[[pic.picture]]"></iron-image> <br>
+    </template>
+    </div>
     </div>
   </template>
 

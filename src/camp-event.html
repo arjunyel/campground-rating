@@ -18,6 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-avatar/paper-avatar.html">
 <link rel="import" href="../bower_components/time-display/time-diff.html">
+<link rel="import" href="../bower_components/numbro-element/numbro-element.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="camp-event">
@@ -42,10 +43,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="card">
       Description: [[event.description]] <br>
       Host: [[event.hostName]] <br>
-      Host Email: [[event.email]] <br>
-      <a href="/profile/[[event.hostUid]]">Host Profile</a>
+      Host Email: [[event.hostEmail]] <br>
+      <a href="/profile/[[event.hostUid]]">Host Profile</a> <br>
       <iron-image preload fade src="[[event.hostPic]]"></iron-image> <br>
       [[event.details]] <br>
+      <numbro-element value="[[event.cost]]" format="0.00" currency></numbro-element> <br>
       Date: [[event.date]] Time: [[event.time]] <br>
       Created: <time-diff datetime="[[event.created]]"></time-diff> <br>
       Location: [[event.locationFull]] <br>
