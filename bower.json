@@ -36,7 +36,8 @@
     "time-display": "CaptainCodeman/time-display#^0.0.2",
     "paper-avatar": "Abe90/paper-avatar#^1.0.2",
     "money-input": "IngressoRapidoWebComponents/money-input#^1.1.0",
-    "numbro-element": "^1.0.8"
+    "numbro-element": "^1.0.8",
+    "scary-gallery": "Scarygami/scary-gallery#^0.0.1"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

@@ -11,6 +11,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/scary-gallery/scary-gallery.html">
+<link rel="import" href="../bower_components/scary-gallery/scary-image.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="camp-welcome">
@@ -32,9 +34,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       Welcome to the Campground rating app!
 
     <div>
-    <template is="dom-repeat" items="{{pictures}}" as="pic">
-      <iron-image preload fade src="[[pic.picture]]"></iron-image> <br>
-    </template>
+    <scary-gallery min-height="100">
+      <template is="dom-repeat" items="{{pictures}}" as="pic">
+        <scary-image src="[[pic.picture]]"></scary-image>
+      </template>
+    </scary-gallery>
     </div>
     </div>
   </template>
