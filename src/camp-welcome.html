@@ -25,18 +25,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
+      <firebase-app
+      name="camp"
+      auth-domain="camp-rating.firebaseapp.com"
+      database-url="https://camp-rating.firebaseio.com"
+      api-key="AIzaSyAkc7o3frmtbjKF4dmwXiJvPJF6gNVxMSU"
+      storage-bucket="camp-rating.appspot.com">
+      </firebase-app>
+      <firebase-query
+      id="photos"
+      path="/photos">
+    </firebase-query>
+
     <firebase-query
       id="photos"
       path="/photos"
-      data="{{pictures}}"></firebase-query>
+      data="{{pictures}}">
+    </firebase-query>
     
     <div class="card">
       Welcome to the Campground rating app!
 
     <div>
     <scary-gallery min-height="100">
-      <template is="dom-repeat" items="{{pictures}}" as="pic">
-        <scary-image src="[[pic.picture]]"></scary-image>
+      <template >
+        <scary-image id = "picture" onload ="getPic()"></scary-image>
       </template>
     </scary-gallery>
     </div>
@@ -46,6 +59,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     Polymer({
       is: 'camp-welcome',
-    });
+   
+     });
+    
   </script>
 </dom-module>
