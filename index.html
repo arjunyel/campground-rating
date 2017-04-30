@@ -104,9 +104,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         min-height: 100vh;
         background-color: #eeeeee;
       }
+
+      #loading{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 1;
+        z-index: 10;
+        background-color: #660000;
+      }
     </style>
   </head>
   <body>
+    <div id="loading">
+      <noscript>
+        <h1>This application requires Javascript!</h1>
+      </noscript>
+    </div>
     <my-app></my-app>
     <!-- Built with love using Polymer Starter Kit -->
   </body>

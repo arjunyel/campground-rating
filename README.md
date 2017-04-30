@@ -1,4 +1,9 @@
 # Campground Rating
+[https://camp-rating.firebaseapp.com/](https://camp-rating.firebaseapp.com/)
+
+A [Progressive Web App](https://developers.google.com/web/progressive-web-apps/) for posting/joining events at campgrounds around the Southern Illinois Area. Users are rated by other users on the quality of the events they host.
+
+Scores a 99 out of 100 on the [Lighthouse PWA Test](https://developers.google.com/web/tools/lighthouse/)
 
 ### Setup
 

@@ -151,7 +151,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     Polymer({
       is: 'my-app',
-
+      ready: function() {
+        var element = document.getElementById("loading");
+        element.parentNode.removeChild(element);
+      },
       properties: {
         page: {
           type: String,
