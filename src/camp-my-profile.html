@@ -48,7 +48,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         float: right;
         width:50%;
-        height: 400px;
+        height: 50%;
+        float: left;
       }
 
       .email{
@@ -58,9 +59,59 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .image{
         width: 50%;
         float: left;
-        height: 400 px;
+        height: 50%;
       }
 
+.col-1 {width: 8.33%;}
+.col-2 {width: 43%; height: 25%; float: left;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 57%; height: 100px; float: left;}
+.col-7 {width: 57%; height: 300px; float: left;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+
+#disEmail{
+
+  color: blue;
+}
+
+#email{
+  color: black;
+}
+
+#nameLine{
+
+  color: black;
+  font-size: 30px;
+  font-style: italic;
+}
+
+
+#displayName{
+
+  color: black;
+  font-size: 30px;
+  font-style: italic;
+}
+
+.container{
+  float: left;
+}
+
+
+#userEvents{
+
+   text-decoration: underline;
+   font-size: 20px;
+   color: green;
+   font-style: italic;
+}
     </style>
 
     <firebase-auth id="auth" user="{{user}}"></firebase-auth>
@@ -83,27 +134,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div class="card">
     
-      <div class="image">
+      <div class="col-2">
       <iron-image src="[[user.photoURL]]" preload fade></iron-image> 
       </div>
 
-       <div class="name">
-       <span>Welcome to the profile of </span> [[user.displayName]] 
+
+       <div class="col-6">
+       <span id="nameLine">Welcome to the profile of </span> <span id="displayName">[[user.displayName]] </span>
       </div>
-      <div class="email">
-        [[user.email]]
+      <div class="col-6">
+        <span id="email">Email Address: </span> <span id="disEmail">[[user.email]]</span>
       </div>
 
 
 
-
+      <div class="col-7">
       Average Rating: <salte-rating disabled value="[[averageRate.avg]]"></salte-rating> <br>
       <template is="dom-repeat" items="{{ratings}}" as="rate">
           <paper-avatar label="[[rate.rater]]" two-chars></paper-avatar> Rated <time-diff datetime="[[rate.created]]"></time-diff>:  <salte-rating disabled value="[[rate.rating]]"></salte-rating> <br><br>
       </template>
-      <br>
-      User events: <br>
+      
+    </div>
+
+
+ 
       <div class="container">
+        <span id="userEvents"> User events:</span>
       <iron-list items="[[events]]" scroll-target="document" as="event" grid>
         <template>
           <div>
