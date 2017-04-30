@@ -18,6 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-avatar/paper-avatar.html">
 <link rel="import" href="../bower_components/time-display/time-diff.html">
+<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 <link rel="import" href="camp-event-card.html">
 <link rel="import" href="shared-styles.html">
 
@@ -40,10 +41,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <firebase-auth id="auth" user="{{user}}"></firebase-auth>
-    <firebase-document
-      id="userInfo"
-      path="/users/info/[[user.uid]]"
-      data="{{profile}}"></firebase-document>
+    <app-indexeddb-mirror
+      session="[[user.uid]]"
+      key="avgRate[[user.uid]]"
+      data="[[averageRate]]"
+      persisted-data="{{persistedAverageRate}}"></app-indexeddb-mirror>
+    <app-indexeddb-mirror
+      session="[[user.uid]]"
+      key="userEvents[[user.uid]]"
+      data="[[events]]"
+      persisted-data="{{persistedEvents}}"></app-indexeddb-mirror>
+    <app-indexeddb-mirror
+      session="[[user.uid]]"
+      key="ratings[[user.uid]]"
+      data="[[ratings]]"
+      persisted-data="{{persistedRatings}}"></app-indexeddb-mirror>
     <firebase-document
       id="avgRate"
       path="/users/avgRate/[[user.uid]]"
@@ -65,14 +77,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         [[user.email]]
       </div>
       <iron-image src="[[user.photoURL]]" preload fade></iron-image> <br>
-      Average Rating: <salte-rating disabled value="[[averageRate.avg]]"></salte-rating> <br>
-      <template is="dom-repeat" items="{{ratings}}" as="rate">
+      Average Rating: <salte-rating disabled value="[[persistedAverageRate.avg]]"></salte-rating> <br>
+      <template is="dom-repeat" items="{{persistedRatings}}" as="rate">
           <paper-avatar label="[[rate.rater]]" two-chars></paper-avatar> Rated <time-diff datetime="[[rate.created]]"></time-diff>:  <salte-rating disabled value="[[rate.rating]]"></salte-rating> <br><br>
       </template>
       <br>
       User events: <br>
       <div class="container">
-      <iron-list items="[[events]]" scroll-target="document" as="event" grid>
+      <iron-list items="[[persistedEvents]]" scroll-target="document" as="event" grid>
         <template>
           <div>
             <camp-event-card event="[[event]]"></camp-event-card>

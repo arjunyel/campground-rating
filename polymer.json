@@ -4,19 +4,33 @@
   "fragments": [
     "src/camp-welcome.html",
     "src/camp-profile.html",
+    "src/camp-my-profile.html",
     "src/camp-event.html",
     "src/camp-map.html",
     "src/camp-place.html",
     "src/camp-welcome.html",
+    "src/camp-create-event.html",
     "src/camp-view404.html"
   ],
   "sources": [
     "src/**/*",
     "images/**/*",
-    "bower.json"
+    "bower.json",
+    "src/json/**/*"
   ],
   "extraDependencies": [
     "manifest.json",
-    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js",
+    "bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror-worker.js",
+    "bower_components/app-storage/app-indexeddb-mirror/common-worker-scope.js"
+  ],
+  "builds": [
+    {
+      "addServiceWorker": true,
+      "swPrecacheConfig": "sw-precache-config.js",
+      "js": {"minify": false},
+      "css": {"minify": true},
+      "html": {"minify": false}
+    }
   ]
 }
