@@ -14,7 +14,12 @@ module.exports = {
   staticFileGlobs: [
     '/index.html',
     '/manifest.json',
-    '/bower_components/webcomponentsjs/webcomponents-lite.min.js',
+    'src/json/crab.json',
+    'src/json/giant.json',
+    'src/json/lake.json',
+    'src/json/little.json',
+    'src/json/marion.json'
   ],
-  navigateFallback: 'index.html'
+  navigateFallback: 'index.html',
+  navigateFallbackWhitelist: [/^(?!\/__)/, ' /getProjectConfig/']
 };

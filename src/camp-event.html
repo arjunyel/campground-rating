@@ -19,6 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-avatar/paper-avatar.html">
 <link rel="import" href="../bower_components/time-display/time-diff.html">
 <link rel="import" href="../bower_components/numbro-element/numbro-element.html">
+<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="camp-event">
@@ -32,6 +33,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <firebase-auth id="auth" user="{{user}}"></firebase-auth>
+    <app-indexeddb-mirror
+      session="[[user.uid]]"
+      key="eventInfo[[key]]"
+      data="[[event]]"
+      persisted-data="{{persistedEvent}}"></app-indexeddb-mirror>
+    <app-indexeddb-mirror
+      session="[[user.uid]]"
+      key="comments[[key]]"
+      data="[[comments]]"
+      persisted-data="{{persistedComments}}"></app-indexeddb-mirror>
     <firebase-document
       path="/events/[[route]]/[[key]]"
       data="{{event}}"></firebase-document>
@@ -41,24 +52,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       data="{{comments}}"></firebase-query>
 
     <div class="card">
-      Description: [[event.description]] <br>
-      Host: [[event.hostName]] <br>
-      Host Email: [[event.hostEmail]] <br>
-      <a href="/profile/[[event.hostUid]]">Host Profile</a> <br>
-      <iron-image preload fade src="[[event.hostPic]]"></iron-image> <br>
-      [[event.details]] <br>
-      <numbro-element value="[[event.cost]]" format="0.00" currency></numbro-element> <br>
-      Date: [[event.date]] Time: [[event.time]] <br>
-      Created: <time-diff datetime="[[event.created]]"></time-diff> <br>
-      Location: [[event.locationFull]] <br>
-      <iron-image preload fade src="[[event.picture]]"></iron-image> <br> <br>
+      Description: [[persistedEvent.description]] <br>
+      Host: [[persistedEvent.hostName]] <br>
+      Host Email: [[persistedEvent.hostEmail]] <br>
+      <a href="/profile/[[persistedEvent.hostUid]]">Host Profile</a> <br>
+      <iron-image preload fade src="[[persistedEvent.hostPic]]"></iron-image> <br>
+      [[persistedEvent.details]] <br>
+      <numbro-element value="[[persistedEvent.cost]]" format="0.00" currency></numbro-element> <br>
+      Date: [[persistedEvent.date]] Time: [[persistedEvent.time]] <br>
+      Created: <time-diff datetime="[[persistedEvent.created]]"></time-diff> <br>
+      Location: [[persistedEvent.locationFull]] <br>
+      <iron-image preload fade src="[[persistedEvent.picture]]"></iron-image> <br> <br>
       <div id="comments">
         <form is="iron-form" id="form" method="get" action="/">
           <div>
             <paper-textarea label="Comment" name="msg" required></paper-textarea> <paper-button raised on-tap="_submit">SUBMIT</paper-button>
           </div>
         </form> <br>
-        <template is="dom-repeat" items="{{comments}}" as="comment">
+        <template is="dom-repeat" items="{{persistedComments}}" as="comment">
           <paper-avatar label="[[comment.poster]]" two-chars></paper-avatar> Sent <time-diff datetime="[[comment.created]]"></time-diff>:  [[comment.msg]]  <br><br>
         </template>
       </div>

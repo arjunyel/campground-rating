@@ -59,6 +59,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: black;
         font-weight: bold;
       }
+
+      #not-loggedin{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 1;
+        z-index: 10;
+        background-color: #660000;
+        text-align: center;
+      }
+      #google-signin-button {
+        background: #D1C4E9;
+        font-weight: 600;
+      }
     </style>
 
     <firebase-app
@@ -68,6 +84,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       storage-bucket="camp-rating.appspot.com">
     </firebase-app>
     <firebase-auth id="auth" user="{{user}}" provider="google" online={{online}}></firebase-auth>
+
+    <div hidden$="[[user]]" id="not-loggedin">
+      <h1>Welcome to Campground Rating!</h1>
+      <paper-button id="google-signin-button" raised on-tap="login">Login with Google</paper-button>
+    </div>
 
     <app-location route="{{route}}"></app-location>
     <app-route
@@ -93,7 +114,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <a name="welcome" href="/welcome">Welcome</a>
           <a name="profile" href="/my-profile">My Profile</a>
           <a name="map" href="/map">Map</a>
-          <a name="create-event" href="/create-event">Create Event</a>
+          <a name="create-event" href="/create-event" hidden$="[[online]]">Create Event</a>
         </iron-selector>
       </app-drawer>
 
@@ -104,7 +125,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
             <div main-title>Campgrounds</div>
-            <paper-button hidden$=[[user]] on-tap="login">Login</iron-icon></paper-button>
+            <paper-button hidden$=[[user]] on-tap="login" hidden$="[[online]]">Login</iron-icon></paper-button>
             <paper-button hidden$=[[!user]] on-tap="logout">Logout</iron-icon></paper-button>
           </app-toolbar>
         </app-header>

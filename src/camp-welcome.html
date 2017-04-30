@@ -10,9 +10,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/scary-gallery/scary-gallery.html">
 <link rel="import" href="../bower_components/scary-gallery/scary-image.html">
+<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="camp-welcome">
@@ -24,7 +26,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 10px;
       }
     </style>
-
+    <firebase-auth user="{{user}}"></firebase-auth>
+    <app-indexeddb-mirror
+      session="[[user.uid]]"
+      key="photos"
+      data="{{pictures}}"
+      persisted-data="{{persistedPics}}"></app-indexeddb-mirror>
     <firebase-query
       id="photos"
       path="/photos"
@@ -35,7 +42,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div>
     <scary-gallery min-height="100">
-      <template is="dom-repeat" items="{{pictures}}" as="pic">
+      <template is="dom-repeat" items="{{persistedPics}}" as="pic">
         <scary-image src="[[pic.picture]]"></scary-image>
       </template>
     </scary-gallery>

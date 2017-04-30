@@ -18,6 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-avatar/paper-avatar.html">
 <link rel="import" href="../bower_components/time-display/time-diff.html">
+<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 <link rel="import" href="camp-event-card.html">
 <link rel="import" href="shared-styles.html">
 
@@ -39,7 +40,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <firebase-auth id="auth" user="{{user}}"></firebase-auth>
+    <firebase-auth id="auth" user="{{user}}" online={{online}}></firebase-auth>
+    <app-indexeddb-mirror
+      session="[[user.uid]]"
+      key="userInfo[[route]]"
+      data="[[profile]]"
+      persisted-data="{{persistedProfile}}"></app-indexeddb-mirror>
+    <app-indexeddb-mirror
+      session="[[user.uid]]"
+      key="avgRate[[route]]"
+      data="[[averageRate]]"
+      persisted-data="{{persistedAverageRate}}"></app-indexeddb-mirror>
+    <app-indexeddb-mirror
+      session="[[user.uid]]"
+      key="userEvents[[route]]"
+      data="[[events]]"
+      persisted-data="{{persistedEvents}}"></app-indexeddb-mirror>
+    <app-indexeddb-mirror
+      session="[[user.uid]]"
+      key="ratings[[route]]"
+      data="[[ratings]]"
+      persisted-data="{{persistedRatings}}"></app-indexeddb-mirror>
     <firebase-document
       id="userInfo"
       path="/users/info/[[route]]"
@@ -59,21 +80,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div class="card">
       <div>
-        [[profile.name]]
+        [[persistedProfile.name]]
       </div>
       <div>
-        [[profile.email]]
+        [[persistedProfile.email]]
       </div>
-      <iron-image src="[[profile.pic]]" preload fade></iron-image> <br>
-      Average Rating: <salte-rating disabled value="[[averageRate.avg]]"></salte-rating> <br>
-      <div id="submitRating">Rate: <salte-rating id="newRating"></salte-rating></div> <br>
-      <template is="dom-repeat" items="{{ratings}}" as="rate">
+      <iron-image src="[[persistedProfile.pic]]" preload fade></iron-image> <br>
+      Average Rating: <salte-rating disabled value="[[persistedAverageRate.avg]]"></salte-rating> <br>
+      <div id="submitRating" hidden$="[[online]]">Rate: <salte-rating id="newRating"></salte-rating></div> <br>
+      <template is="dom-repeat" items="{{persistedRatings}}" as="rate">
           <paper-avatar label="[[rate.rater]]" two-chars></paper-avatar> Rated <time-diff datetime="[[rate.created]]"></time-diff>:  <salte-rating disabled value="[[rate.rating]]"></salte-rating> <br><br>
       </template>
       <br>
       User events: <br>
       <div class="container">
-      <iron-list items="[[events]]" scroll-target="document" as="event" grid>
+      <iron-list items="[[persistedEvents]]" scroll-target="document" as="event" grid>
         <template>
           <div>
             <camp-event-card event="[[event]]"></camp-event-card>
@@ -96,7 +117,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       },
       newRate: function(e) {
-        console.log()
         const time = new Date().toISOString();
         let newRating = this.$.ratings.ref.push();
         newRating.set({
