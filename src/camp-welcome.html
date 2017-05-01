@@ -32,22 +32,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       key="photos"
       data="{{pictures}}"
       persisted-data="{{persistedPics}}"></app-indexeddb-mirror>
-    <firebase-query
-      id="photos"
-      path="/photos"
-      data="{{pictures}}"></firebase-query>
     
-    <div class="card">
-      Welcome to the Campground rating app!
+    <template is="dom-if" if="[[user]]"> <!--If user logged in, load photo grid-->
+      <firebase-query
+        id="photos"
+        path="/photos"
+        data="{{pictures}}"></firebase-query>
+      
+      <div class="card">
+        Welcome to the Campground rating app!
 
-    <div>
-    <scary-gallery min-height="100">
-      <template is="dom-repeat" items="{{persistedPics}}" as="pic">
-        <scary-image src="[[pic.picture]]"></scary-image>
-      </template>
-    </scary-gallery>
-    </div>
-    </div>
+      <div>
+      <scary-gallery min-height="100">
+        <template is="dom-repeat" items="{{persistedPics}}" as="pic">
+          <scary-image src="[[pic.picture]]"></scary-image>
+        </template>
+      </scary-gallery>
+      </div>
+      </div>
+    </template>
   </template>
 
   <script>
