@@ -22,13 +22,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       google-map {
-        height: 700px;
+        height: 550px;
+      }
+      #title {
+        text-align: center;
       }
     </style>
 
     <div class="card">
-      <h1>Welcome to Camping Events!</h1>
-      <google-map single-info-window fit-to-markers api-key="AIzaSyDp7hNij6d2Rh6YOSV7BoWF0Hyrw3swDU4" map-type="satellite">
+      <h1 id="title">Please Choose A Place.</h1>
+      <google-map single-info-window fit-to-markers api-key="AIzaSyDp7hNij6d2Rh6YOSV7BoWF0Hyrw3swDU4" map-type="hybrid">
         <google-map-marker latitude="37.739299" longitude="-89.117665">
           <a href="/place/crab">Crab Orchard Campground</a> <br>
           <img src="https://www.fws.gov/uploadedImages/Region_3/NWRS/Zone_2/Crab_Orchard/Sections/Visit/Visitor_Activities/DKcampground.jpg">
