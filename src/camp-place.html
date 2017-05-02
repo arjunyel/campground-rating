@@ -54,6 +54,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     
     <firebase-auth id="auth" user="{{user}}"></firebase-auth>
+    <!--Take the data from firebase and ajax and store it for offline-->
     <app-indexeddb-mirror
       session="[[user.uid]]"
       key="events[[route]]"
@@ -81,10 +82,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       
       <address>[[persistedPlace.address]]</address>
       <br>
+      <!--Beautiful weather widget-->
       <paper-weather location="[[persistedPlace.zip]]"></paper-weather>
       <br>
       <br>
       <div class="container">
+      <!--List out all the events at the location-->
       <iron-list items="[[persistedEvents]]" scroll-target="document" as="event" grid>
         <template>
           <div>

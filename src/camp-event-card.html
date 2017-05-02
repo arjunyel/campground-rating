@@ -28,7 +28,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --paper-card-header-color: white;
       }
     </style>
-    <paper-card heading="[[event.description]]" image="[[event.picture]]" alt="">
+    <!--Create a paper card that has event details-->
+    <paper-card heading="[[event.description]]" image="[[event.picture]]" alt="[[event.description]]">
       <div class="card-content">
         [[event.details]] <br>
         <numbro-element value="[[event.cost]]" format="0.00" currency></numbro-element> <br>

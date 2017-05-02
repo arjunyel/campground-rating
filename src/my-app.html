@@ -85,12 +85,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </firebase-app>
     <firebase-auth id="auth" user="{{user}}" provider="google" online={{online}}></firebase-auth>
 
-    <div hidden$="[[user]]" id="not-loggedin">
+    <div hidden$="[[user]]" id="not-loggedin"> <!--Display splash screen if not logged in-->
       <h1>Welcome to Campground Rating!</h1>
       <paper-button id="google-signin-button" raised on-tap="login">Login with Google</paper-button>
     </div>
 
     <app-location route="{{route}}"></app-location>
+    <!--The app routes take variables out of the URL, takes the first for iron-pages, and sends the rest to child elements-->
     <app-route
         route="{{route}}"
         pattern="/:page"
@@ -152,7 +153,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'my-app',
       ready: function() {
-        var element = document.getElementById("loading");
+        var element = document.getElementById("loading"); //Remove loading div when loaded
         element.parentNode.removeChild(element);
       },
       properties: {
@@ -185,11 +186,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.page = 'view404';
       },
 
-      login: function(){
+      login: function() {
         return this.$.auth.signInWithPopup();
       },
 
-      logout: function(){
+      logout: function() {
         return this.$.auth.signOut();
       },
     });
