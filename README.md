@@ -1,4 +1,5 @@
 # Campground Rating
+
 [https://camp-rating.firebaseapp.com/](https://camp-rating.firebaseapp.com/)
 
 A [Progressive Web App](https://developers.google.com/web/progressive-web-apps/) for posting/joining events at campgrounds around the Southern Illinois Area. Users are rated by other users on the quality of the events they host.
@@ -23,6 +24,11 @@ Install [Bower](https://bower.io/)
     git clone https://github.com/arjunyel/campground-rating.git
     cd campground-rating
     bower install
+
+##### Generate service worker and deploy to internet
+
+    polymer build
+    firebase deploy
 
 ### Start the development server
 
