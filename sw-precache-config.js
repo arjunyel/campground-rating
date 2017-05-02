@@ -18,8 +18,8 @@ module.exports = {
     'src/json/giant.json',
     'src/json/lake.json',
     'src/json/little.json',
-    'src/json/marion.json'
+    'src/json/marion.json',
   ],
   navigateFallback: 'index.html',
-  navigateFallbackWhitelist: [/^(?!\/__)/, ' /getProjectConfig/']
+  navigateFallbackWhitelist: [/^(?!\/__)/, ' /getProjectConfig/'],
 };

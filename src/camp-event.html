@@ -33,6 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <firebase-auth id="auth" user="{{user}}"></firebase-auth>
+    <!--App-indexeddb takes data from firebase and makes it available offline-->
     <app-indexeddb-mirror
       session="[[user.uid]]"
       key="eventInfo[[key]]"
@@ -50,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       id="query"
       path="/comments/[[key]]"
       data="{{comments}}"></firebase-query>
-
+  <!--Here we list out all the event details-->
     <div class="card">
       Description: [[persistedEvent.description]] <br>
       Host: [[persistedEvent.hostName]] <br>
@@ -63,12 +64,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       Created: <time-diff datetime="[[persistedEvent.created]]"></time-diff> <br>
       Location: [[persistedEvent.locationFull]] <br>
       <iron-image preload fade src="[[persistedEvent.picture]]"></iron-image> <br> <br>
+      
       <div id="comments">
+        <!--Add a comment using form so we can use Required attribute-->
         <form is="iron-form" id="form" method="get" action="/">
           <div>
             <paper-textarea label="Comment" name="msg" required></paper-textarea> <paper-button raised on-tap="_submit">SUBMIT</paper-button>
           </div>
         </form> <br>
+        <!--Spit out all the comments using DOM repeat-->
         <template is="dom-repeat" items="{{persistedComments}}" as="comment">
           <paper-avatar label="[[comment.poster]]" two-chars></paper-avatar> Sent <time-diff datetime="[[comment.created]]"></time-diff>:  [[comment.msg]]  <br><br>
         </template>

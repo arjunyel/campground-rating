@@ -31,7 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 10px;
       }
       iron-list {
-        flex: 1 1 auto; /* don't use % values unless the parent element is sized. */
+        flex: 1 1 auto;
       }
       camp-event-card {
         margin: 10px;
@@ -39,7 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         height: 290px;
       }
     </style>
-
+    <!--See camp-profile for more details, we created this page so theres no overhead of checking if the profile is of the user logged in-->
     <firebase-auth id="auth" user="{{user}}"></firebase-auth>
     <app-indexeddb-mirror
       session="[[user.uid]]"

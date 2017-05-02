@@ -31,7 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 10px;
       }
       iron-list {
-        flex: 1 1 auto; /* don't use % values unless the parent element is sized. */
+        flex: 1 1 auto;
       }
       camp-event-card {
         margin: 10px;
@@ -41,6 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <firebase-auth id="auth" user="{{user}}"></firebase-auth>
+    <!--Grab all the data about the user and their events, store it for offline use-->
     <app-indexeddb-mirror
       session="[[user.uid]]"
       key="userInfo[[route]]"
@@ -87,6 +88,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
       <iron-image src="[[persistedProfile.pic]]" preload fade></iron-image> <br>
       Average Rating: <salte-rating disabled value="[[persistedAverageRate.avg]]"></salte-rating> <br>
+      <!--This lets you add a new rating, it is then spit out as part of the dom-repeat-->
       <div>Rate: <salte-rating id="newRating"></salte-rating></div> <br>
       <template is="dom-repeat" items="{{persistedRatings}}" as="rate">
           <paper-avatar label="[[rate.rater]]" two-chars></paper-avatar> Rated <time-diff datetime="[[rate.created]]"></time-diff>:  <salte-rating disabled value="[[rate.rating]]"></salte-rating> <br><br>
@@ -94,6 +96,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <br>
       User events: <br>
       <div class="container">
+      <!--List out all the events the user is involved in-->
       <iron-list items="[[persistedEvents]]" scroll-target="document" as="event" grid>
         <template>
           <div>
@@ -125,10 +128,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           created: time
         });
         let average = this.$.avgRate.ref;
+        //Start a firebase transaction, we need to update the average rating based on new rating
         average.transaction(function(rating) {
-          if (rating === null) {
+          if (rating === null) { //Account for null ratings
             return  { num: 1, avg: e.detail.rating};
           } else {
+            //average rating algo from https://math.stackexchange.com/a/957376
             const sizeNew = rating.num + 1;
             const avgOld = rating.avg;
             const valueNew = e.detail.rating;
